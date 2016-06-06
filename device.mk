@@ -16,7 +16,7 @@
 $(call inherit-product-if-exists, vendor/yu/sambar/sambar-vendor.mk)
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/dt.img:dt.img \
+        $(LOCAL_PATH)/dt.img:dt.img \
 	$(LOCAL_PATH)/kernel:kernel \
 	$(LOCAL_PATH)/wifi/wlan.ko:system/lib/modules/wlan.ko
 
