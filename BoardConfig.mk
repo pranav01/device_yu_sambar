@@ -54,25 +54,24 @@ TARGET_CPU_CORTEX_A53 := true
 ENABLE_CPUSETS := true
 
 # Kernel
-BOARD_DTBTOOL_ARGS := -2
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 boot_cpus=0-5
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_SEPARATED_DT := true
-BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
-BOARD_RAMDISK_OFFSET     := 0x02000000
-ifneq ($(SAMBAR_32_BIT),true)
-TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
-endif
-TARGET_KERNEL_CONFIG := yu_sambar_defconfig
-TARGET_KERNEL_SOURCE := kernel/yu/sambar
+BOARD_MKBOOTIMG_ARGS := --kernel_offset 0x00008000 --ramdisk_offset 0x02000000 --tags_offset 0x01e00000 --dt $(DEVICE_PATH)/dt.img
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/kernel
+#ifneq ($(SAMBAR_32_BIT),true)
+#TARGET_KERNEL_ARCH := arm64
+#TARGET_KERNEL_HEADER_ARCH := arm64
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+#endif
+#TARGET_KERNEL_CONFIG := yu_sambar_defconfig
+#TARGET_KERNEL_SOURCE := kernel/yu/msm8994
 
 # Enable DIAG on debug builds
-ifneq ($(TARGET_BUILD_VARIANT),user)
-TARGET_KERNEL_ADDITIONAL_CONFIG ?= yu_debug_config
-endif
+#ifneq ($(TARGET_BUILD_VARIANT),user)
+#TARGET_KERNEL_ADDITIONAL_CONFIG ?= yu_debug_config
+#endif
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-uart"
@@ -116,13 +115,15 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
 
+# Hardware
+TARGET_POWER_SET_FEATURE_LIB := libpower_set_feature
+
 # CNE and DPM
 TARGET_LDPRELOAD := libNimsWrap.so
 BOARD_USES_QCNE := true
 
 # Crypto
 TARGET_HW_DISK_ENCRYPTION := true
-
 
 # Display
 BOARD_EGL_CFG := $(DEVICE_PATH)/configs/egl.cfg
